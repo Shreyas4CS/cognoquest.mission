@@ -73,6 +73,7 @@
   <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
   <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/></symbol>
   <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+  <symbol id="i-focus" viewBox="0 0 24 24"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><circle cx="12" cy="12" r="3.3"/></symbol>
   <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></symbol>
   <symbol id="i-arrowup" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
   <symbol id="i-arrowdown" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol>
@@ -181,7 +182,7 @@
       <div class="wins">
         <div class="win rv" style="--c:var(--violet);--cs:var(--violet-s)"><span class="wi"><svg class="i"><use href="#i-brain"/></svg></span><div><b>Better data, better AI</b><p>Varied photos (angles, light, distance) make the AI sure of itself in the arena.</p></div></div>
         <div class="win rv" style="--d:100ms;--c:var(--brand);--cs:var(--brand-s)"><span class="wi"><svg class="i"><use href="#i-eye"/></svg></span><div><b>Memory under pressure</b><p>The mission hides after a few seconds. Peeking costs points.</p></div></div>
-        <div class="win rv" style="--d:200ms;--c:var(--sky);--cs:var(--sky-s)"><span class="wi"><svg class="i"><use href="#i-key"/></svg></span><div><b>Smooth driving</b><p>Speed keys, trim and slow mode reward careful control; collisions cost points.</p></div></div>
+        <div class="win rv" style="--d:200ms;--c:var(--sky);--cs:var(--sky-s)"><span class="wi"><svg class="i"><use href="#i-key"/></svg></span><div><b>Smooth driving</b><p>Speed keys, trim and slow mode reward careful control. Every second saved is a bonus point.</p></div></div>
         <div class="win rv" style="--d:300ms;--c:var(--mint);--cs:var(--mint-s)"><span class="wi"><svg class="i"><use href="#i-shield"/></svg></span><div><b>No faking</b><p>The AI, not the team, names every photo. Wrong captures lose points.</p></div></div>
       </div>
     </div>
@@ -223,19 +224,25 @@
     <div class="cam-tools">
       <button class="ibtn" data-ct="switch" title="Switch camera"><svg class="i"><use href="#i-switch"/></svg></button>
       <button class="ibtn" data-ct="torch" title="Torch"><svg class="i"><use href="#i-torch"/></svg></button>
+      <button class="ibtn" data-ct="zoom" title="Zoom 1x / 2x / 3x"><b class="mono" style="font-size:.78rem" id="camZ">1x</b></button>
+      <button class="ibtn" data-ct="focus" title="Focus: auto / lock"><svg class="i"><use href="#i-focus"/></svg></button>
       <button class="ibtn" data-ct="quality" title="Stream quality"><b class="mono" style="font-size:.72rem" id="camQ">480p</b></button>
       <button class="ibtn" data-ct="full" title="Full screen"><svg class="i"><use href="#i-full"/></svg></button>
     </div>
     <div class="cam-status"><span class="dot" id="camDot"></span><div class="grow"><b id="camState">Not connected</b><small id="camSub">Enter the code from the laptop</small></div><span class="tag" id="camRtt">— ms</span></div>
   </div>
+  <div class="camscan" id="camScan" hidden><div class="sframe"><i></i><i></i><i></i><i></i><span class="sline2"></span></div><b>Point at the QR on the laptop screen</b><button class="btn" id="camScanX">Cancel</button></div>
   <div class="join" id="camJoin"><div class="card">
     <img data-logo alt="CognoSpace">
     <div class="phoneart"><svg class="i"><use href="#i-phone"/></svg></div>
     <h2>Robot camera</h2>
-    <p>Join the same Wi-Fi as the laptop, then type the 4-letter code shown on the laptop under <b>Robot camera</b>.</p>
-    <input class="inp codein" id="camCode" maxlength="4" placeholder="ABCD" autocomplete="off" autocapitalize="characters" spellcheck="false">
-    <button class="btn btn--grad btn--lg btn--block" id="camJoinBtn" style="margin-top:.9rem"><svg class="i"><use href="#i-link"/></svg>Start streaming</button>
-    <p class="hint" style="margin:.9rem 0 0">Tip: scan the QR on the laptop with this phone's camera app to fill this in automatically.</p>
+    <div class="wifireq"><svg class="i"><use href="#i-wifi"/></svg><span>Connect this phone to the <b>same Wi-Fi</b> as the laptop. Then video goes straight over Wi-Fi in HD.</span></div>
+    <button class="btn btn--grad btn--lg btn--block" id="camScanBtn" style="margin-top:.9rem"><svg class="i"><use href="#i-qr"/></svg>Scan laptop QR</button>
+    <button class="btn btn--lg btn--block" id="camReBtn" style="margin-top:.5rem" hidden></button>
+    <p class="hint" style="margin:.7rem 0 0">On the laptop: <b>Robot cam</b> shows a QR. Point this phone at it.</p>
+    <details class="more" id="camType" style="margin-top:.6rem"><summary><svg class="i"><use href="#i-chev"/></svg>Type the code instead</summary>
+      <input class="inp codein" id="camCode" maxlength="4" placeholder="ABCD" autocomplete="off" autocapitalize="characters" spellcheck="false" style="margin-top:.5rem">
+      <button class="btn btn--dark btn--block" id="camJoinBtn" style="margin-top:.6rem"><svg class="i"><use href="#i-link"/></svg>Start streaming</button></details>
     <div class="row" style="gap:.5rem;justify-content:center;margin-top:.8rem"><button class="btn btn--ghost btn--sm" id="camJoinHome"><svg class="i"><use href="#i-home"/></svg>Home</button><button class="btn btn--ghost btn--sm" id="camJoinAdmin"><svg class="i"><use href="#i-lock"/></svg>Admin</button></div>
   </div></div>
 </div>
@@ -286,6 +293,8 @@
         <button class="ibtn" data-v="mirror" title="Mirror"><svg class="i"><use href="#i-mirror"/></svg></button>
         <button class="ibtn" data-v="flip" title="Flip upside down"><svg class="i"><use href="#i-flip"/></svg></button>
         <button class="ibtn" data-v="torch" title="Phone torch"><svg class="i"><use href="#i-torch"/></svg></button>
+        <button class="ibtn zoomb" data-v="zoom" title="Zoom 1x / 2x / 3x"><b class="mono" id="zoomTxt">1x</b></button>
+        <button class="ibtn" data-v="focus" title="Auto focus · click to lock. Click the video to focus on a spot"><svg class="i"><use href="#i-focus"/></svg></button>
         <span class="sep"></span>
         <label class="zone" title="Size of the box the AI looks at">AI box <input type="range" id="zone" min="40" max="100" step="5"><output id="zoneOut" class="mono">70%</output></label>
         <button class="ibtn" data-v="full" title="Full screen"><svg class="i"><use href="#i-full"/></svg></button>
@@ -446,7 +455,7 @@ const MAX_PICS = 200, MIN_PICS = 5, GOOD_PICS = 30;
 const VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
 const EMB_MODEL = 'https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite';
-const PTS = {found:10, order:5, full:20, wrong:-8, dup:-2, pushFull:15, pushHalf:7, peek:-5, collision:-3, touch:-5, finish:10};
+const PTS = {found:10, order:5, cp:5, full:20, wrong:-8, dup:-2, pushFull:15, pushHalf:7, peek:-5, finish:10};
 
 /* ---------------- helpers ---------------- */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -677,11 +686,60 @@ function tLog(t){ $('#tLog').textContent = t; }
    VIDEO SOURCE on the laptop: its own camera, or the robot camera
    ===================================================================== */
 const vid = $('#mVideo');
+/* camera zoom, focus and Wi-Fi path helpers (used by the laptop and the phone) */
+async function hwZoom(track, z){                       // returns how much of the zoom the camera did itself (1 = none)
+  const caps = track?.getCapabilities?.() || {};
+  if (!caps.zoom || z <= 1){ if (caps.zoom) try { await track.applyConstraints({advanced:[{zoom:caps.zoom.min || 1}]}); } catch {} return 1; }
+  const min = caps.zoom.min || 1, max = caps.zoom.max || min, v = clamp(min*z, min, max);
+  try { await track.applyConstraints({advanced:[{zoom:v}]}); return v/min; } catch { return 1; }
+}
+async function hwFocus(track, mode, pt){                // mode 'auto' | 'lock'; pt = {x,y} 0..1 to focus on a spot
+  const caps = track?.getCapabilities?.() || {}, modes = caps.focusMode || [];
+  if (!modes.length) return false;
+  const pick = (...m) => m.find(x => modes.includes(x));
+  const c = {focusMode:pt || mode === 'lock' ? pick('single-shot', 'manual') : pick('continuous', 'single-shot')};
+  if (!c.focusMode) return false;
+  if (pt && caps.pointsOfInterest !== undefined) c.pointsOfInterest = [{x:clamp(pt.x, 0, 1), y:clamp(pt.y, 0, 1)}];
+  try { await track.applyConstraints({advanced:[c]}); return true; }
+  catch { try { delete c.pointsOfInterest; await track.applyConstraints({advanced:[c]}); return true; } catch { return false; } }
+}
+async function netType(pc){                             // 'lan' = same Wi-Fi (direct), 'internet', 'relay', 'unknown'
+  try {
+    const st = await pc.getStats(); let pair = null;
+    st.forEach(r => { if (r.type === 'transport' && r.selectedCandidatePairId) pair = st.get(r.selectedCandidatePairId); });
+    if (!pair) st.forEach(r => { if (!pair && r.type === 'candidate-pair' && r.state === 'succeeded' && (r.nominated || r.selected)) pair = r; });
+    const L = pair && st.get(pair.localCandidateId), Rm = pair && st.get(pair.remoteCandidateId);
+    if (!L || !Rm) return 'unknown';
+    if (L.candidateType === 'relay' || Rm.candidateType === 'relay') return 'relay';
+    const priv = a => !a || /\.local$/i.test(a) || /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|::1|fe80|fd|fc)/i.test(a);
+    const near = c => c.candidateType === 'host' || (c.candidateType === 'prflx' && priv(c.address || c.ip));
+    return near(L) && near(Rm) ? 'lan' : 'internet';
+  } catch { return 'unknown'; }
+}
+const NET_TXT = {lan:'Same Wi-Fi', internet:'Not on the same Wi-Fi', relay:'Not on the same Wi-Fi (relayed)', unknown:'Checking Wi-Fi…'};
+const pairCodeFrom = s => { const m = /[#&?]cam=([A-Za-z]{4})/.exec(s || '') || /^\s*([A-Za-z]{4})\s*$/.exec(s || ''); return m ? m[1].toUpperCase() : null; };
+
 const Source = {
-  kind:'none', want:LS.get('src', 'laptop'), off:false, local:null, remote:null, devs:[], devIdx:0,
+  kind:'none', want:LS.get('src', 'laptop'), off:false, local:null, remote:null, devs:[], devIdx:0, zf:1, focus:'auto',
   show(kind){
     this.kind = kind; vid.srcObject = kind === 'laptop' ? this.local : kind === 'phone' ? this.remote : null; vid.play?.().catch(() => {});
-    Engine.reset(); renderSource();
+    Engine.reset(); this.focus = 'auto'; renderSource(); if (kind !== 'none') this.applyZoom();
+  },
+  /* digital zoom that is still needed after the camera's own (optical / sensor) zoom */
+  dz(){ const z = S.zoom || 1, f = this.kind === 'phone' ? (Link.info?.zoomF || 1) : this.kind === 'laptop' ? this.zf : 1; return Math.max(1, z/f); },
+  async applyZoom(){
+    if (this.kind === 'laptop') this.zf = await hwZoom(this.local?.getVideoTracks()[0], S.zoom || 1);
+    else if (this.kind === 'phone') Link.send({t:'zoom', v:S.zoom || 1});
+    renderSource();
+  },
+  zoomStep(){ if (this.kind === 'none') return; S.zoom = (S.zoom || 1) % 3 + 1; saveS(); this.applyZoom(); toast(`Zoom ${S.zoom}x`); },
+  async focusStep(pt){
+    if (this.kind === 'none') return;
+    const next = pt ? 'lock' : this.focus === 'auto' ? 'lock' : 'auto';
+    if (this.kind === 'phone'){ Link.send({t:'focus', mode:next, pt:pt || null}); return; }   // the phone answers with its real focus state
+    const ok = await hwFocus(this.local?.getVideoTracks()[0], next, pt);
+    if (!ok){ if (!pt) toast('This laptop camera focuses by itself. The browser cannot change its focus.', 'warn'); return; }
+    this.focus = next; renderSource(); toast(pt ? 'Focused on that spot' : next === 'auto' ? 'Auto focus' : 'Focus locked');
   },
   async laptop(){
     this.want = 'laptop'; this.off = false; LS.set('src', 'laptop');
@@ -745,7 +803,12 @@ function renderSource(){
   $('[data-v="switch"]').disabled = !on;
   const pw = $('[data-v="power"]'); pw.classList.toggle('off', !on); pw.title = on ? 'Turn camera off' : 'Turn camera on';
   for (const v of ['rot', 'mirror', 'flip']) $(`[data-v="${v}"]`).classList.toggle('on', !!S[v]);
-  vid.style.transform = `scale(${(S.mirror ? -1 : 1)*(S.rot ? -1 : 1)},${(S.flip ? -1 : 1)*(S.rot ? -1 : 1)})`;
+  const dz = on ? Source.dz() : 1;
+  vid.style.transform = `scale(${(S.mirror ? -1 : 1)*(S.rot ? -1 : 1)*dz},${(S.flip ? -1 : 1)*(S.rot ? -1 : 1)*dz})`;
+  $('#zoomTxt').textContent = (S.zoom || 1) + 'x'; $('[data-v="zoom"]').disabled = !on; $('[data-v="zoom"]').classList.toggle('on', (S.zoom || 1) > 1);
+  const fb = $('[data-v="focus"]'); fb.disabled = !on; fb.classList.toggle('on', Source.focus === 'lock'); fb.title = Source.focus === 'lock' ? 'Focus locked · click for auto focus' : 'Auto focus · click to lock. Click the video to focus on a spot';
+  const net = k === 'phone' ? Link.info?.net : null;
+  if (net && net !== 'unknown'){ const n = $('#pSrc'); n.insertAdjacentHTML('beforeend', `<span class="nettag ${net === 'lan' ? 'ok' : 'bad'}">${icon(net === 'lan' ? 'i-wifi' : 'i-warn')}${net === 'lan' ? 'Same Wi-Fi' : 'Not same Wi-Fi'}</span>`); }
   if (Page.cur === 'mission' && Mission.state === 'idle') Mission.render();
 }
 vid.addEventListener('resize', renderSource);
@@ -755,7 +818,8 @@ function grab(){
   const k = 480/Math.max(vw, vh), W = Math.round(vw*k), H = Math.round(vh*k);
   if (proc.width !== W || proc.height !== H){ proc.width = W; proc.height = H; }
   const sx = S.rot ? -1 : 1, sy = (S.flip ? -1 : 1)*(S.rot ? -1 : 1);
-  pctx.setTransform(sx, 0, 0, sy, sx < 0 ? W : 0, sy < 0 ? H : 0); pctx.drawImage(vid, 0, 0, W, H); pctx.setTransform(1, 0, 0, 1, 0, 0);
+  const dz = Source.dz(), cw = vw/dz, chh = vh/dz;
+  pctx.setTransform(sx, 0, 0, sy, sx < 0 ? W : 0, sy < 0 ? H : 0); pctx.drawImage(vid, (vw - cw)/2, (vh - chh)/2, cw, chh, 0, 0, W, H); pctx.setTransform(1, 0, 0, 1, 0, 0);
   return proc;
 }
 const zoneBox = (W, H) => { const s = Math.min(W, H)*S.zone/100; return {x:(W - s)/2, y:(H - s)/2, s}; };
@@ -803,17 +867,24 @@ const Link = {
     if (!d || typeof d !== 'object') return;
     if (d.t === 'ping') this.send({t:'pong', ts:d.ts});
     else if (d.t === 'rtt'){ this.rtt = d.v; $('#pLat').textContent = Math.round(d.v) + ' ms'; }
-    else if (d.t === 'info'){ this.info = d; renderSource(); }
+    else if (d.t === 'info'){
+      const was = this.info?.net; this.info = d;
+      if (d.zoom && d.zoom !== S.zoom){ S.zoom = d.zoom; saveS(); }
+      if (d.focus && d.focus !== Source.focus){ Source.focus = d.focus; if (was !== undefined) toast(d.focus === 'lock' ? 'Robot camera focus locked' : 'Robot camera auto focus'); }
+      if (d.net && d.net !== was && d.net !== 'unknown') d.net === 'lan' ? toast(`Robot camera on the same Wi-Fi · ${d.q}p HD`, 'ok') : toast('The phone is NOT on the same Wi-Fi as this laptop. Video goes over the internet, so it is slower and lower quality. Join the same Wi-Fi.', 'bad');
+      renderSource(); renderPairStatus();
+    }
+    else if (d.t === 'note') toast(d.text, 'warn');
     else if (d.t === 'modelAck'){ this.onAck?.(d); }
   }
 };
 function openPair(){
   if (!Link.peer) Link.start();
-  modal({title:'Connect the robot camera', ok:'', cancel:'Close', wide:true, text:'Put the phone on the <b>same Wi-Fi</b> as this laptop.', extra:`
+  modal({title:'Connect the robot camera', ok:'', cancel:'Close', wide:true, text:'Connect the phone to the <b>same Wi-Fi</b> as this laptop. Video then goes straight over Wi-Fi in HD.', extra:`
     <div class="pair"><div class="qrbox" id="pairQr"></div><div>
       <small class="hint">Pairing code</small><div class="paircode" id="pairCode">${Link.code}</div>
       <div class="row wrap" style="margin-top:.5rem"><span class="tag" id="peerTag"></span><button class="btn btn--sm" id="copyLink">${icon('i-copy')}Copy link</button><button class="btn btn--sm btn--ghost" id="newCodeBtn">New code</button></div>
-      <ol class="psteps"><li>Scan the QR with the phone camera, or open this page on the phone</li><li>Tap <b>I'm the robot camera</b> and type the code</li><li>Mount the phone on the robot, camera facing forward</li></ol>
+      <ol class="psteps"><li>Phone on the <b>same Wi-Fi</b> as this laptop</li><li>Scan this QR with the phone camera, <b>or</b> open this page on the phone → <b>I'm the robot camera</b> → <b>Scan laptop QR</b></li><li>Mount the phone on the robot, camera facing forward</li></ol><p class="hint" style="margin-top:.4rem">No QR reader? Type the code instead.</p>
     </div></div>
     <p class="hint" id="fileWarn" style="margin-top:.8rem;color:var(--sun-d)" ${location.protocol === 'file:' ? '' : 'hidden'}><b>Heads-up:</b> this page is opened as a local file, so the phone cannot open the QR link. Host it on an https:// site, or just type the code on the phone.</p>`,
     onOpen:m => { m._pair = true; renderPairStatus();
@@ -827,24 +898,28 @@ function renderPairStatus(msg){
   $('#pairCode').textContent = Link.code;
   if (window.qrcode){ const g = qrcode(0, 'M'); g.addData(Link.url()); g.make(); q.innerHTML = g.createSvgTag({cellSize:4, margin:1, scalable:true}); }
   tag.className = 'tag ' + (Source.remote ? 'ok' : st === 'ready' ? 'sky' : st === 'bad' ? 'bad' : 'warn');
-  tag.innerHTML = `<span class="dot" data-s="${Source.remote || st === 'ready' ? 'ok' : st === 'bad' ? 'bad' : 'busy'}"></span>${Source.remote ? 'Phone streaming' : st === 'ready' ? 'Waiting for the phone' : st === 'bad' ? esc(msg || 'Offline') : 'Starting…'}`;
+  const nt = Source.remote && Link.info?.net && Link.info.net !== 'unknown' ? ` · ${NET_TXT[Link.info.net]}` : '';
+  tag.innerHTML = `<span class="dot" data-s="${Source.remote || st === 'ready' ? 'ok' : st === 'bad' ? 'bad' : 'busy'}"></span>${Source.remote ? 'Phone streaming' + nt : st === 'ready' ? 'Waiting for the phone' : st === 'bad' ? esc(msg || 'Offline') : 'Starting…'}`;
 }
 
 /* =====================================================================
    ROBOT CAMERA (phone side)
    ===================================================================== */
 const Cam = {
-  stream:null, facing:'environment', torch:false, q:LS.get('camQ', '480'), peer:null, conn:null, call:null, code:'', joined:false, retryT:0, pingT:0, wake:null, model:null, detT:0,
+  stream:null, facing:'environment', torch:false, qSel:LS.get('camQSel', 'auto'), q:'480', net:'unknown', zoom:1, zoomF:1, focus:'auto', scanning:false, peer:null, conn:null, call:null, code:'', joined:false, retryT:0, pingT:0, wake:null, model:null, detT:0,
   async open(){
     this.stream?.getTracks().forEach(t => t.stop());
-    const hi = this.q === '720';
-    try { this.stream = await navigator.mediaDevices.getUserMedia({audio:false, video:{facingMode:{ideal:this.facing}, width:{ideal:hi ? 1280 : 640}, height:{ideal:hi ? 720 : 480}, frameRate:{ideal:24, max:30}}}); }
+    this.q = this.qSel !== 'auto' ? this.qSel : this.net === 'lan' ? '720' : '480';   // same Wi-Fi = HD automatically
+    const [w, h] = {480:[640, 480], 720:[1280, 720], 1080:[1920, 1080]}[this.q];
+    try { this.stream = await navigator.mediaDevices.getUserMedia({audio:false, video:{facingMode:{ideal:this.facing}, width:{ideal:w}, height:{ideal:h}, frameRate:{ideal:24, max:30}}}); }
     catch (e) { this.stream = null; camStatus('bad', 'Camera blocked', e.name === 'NotAllowedError' ? 'Allow the camera for this page in the browser settings' : (e.message || e.name)); return false; }
     const v = $('#camLocal'); v.srcObject = this.stream; v.play().catch(() => {}); v.style.transform = this.facing === 'user' ? 'scaleX(-1)' : '';
     this.torch = false; this.renderTools();
     const tr = this.stream.getVideoTracks()[0], snd = this.call?.peerConnection?.getSenders?.().find(s => s.track?.kind === 'video' || s.track === null);
     if (snd && tr) await snd.replaceTrack(tr).catch(e => console.warn(e));
-    this.sendInfo(); return true;
+    if (this.zoom > 1) this.zoomF = await hwZoom(tr, this.zoom); else this.zoomF = 1;
+    if (this.focus === 'lock') await hwFocus(tr, 'lock');
+    this.setBitrate(); this.renderTools(); this.sendInfo(); return true;
   },
   async join(code){
     code = (code || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
@@ -880,10 +955,56 @@ const Cam = {
     const pc = call.peerConnection;
     pc?.addEventListener('iceconnectionstatechange', () => {
       if (this.call !== call) return; const s = pc.iceConnectionState;
-      if (s === 'connected' || s === 'completed'){ if (this.paused) camStatus('busy', 'Camera paused', `Still connected to laptop ${this.code}`); else { camStatus('ok', 'Streaming to the laptop', `Code ${this.code} · ${this.q}p · keep this screen on`); $('#camLive').hidden = false; } }
+      if (s === 'connected' || s === 'completed'){ if (this.paused) camStatus('busy', 'Camera paused', `Still connected to laptop ${this.code}`); else { this.okStatus(); $('#camLive').hidden = false; } setTimeout(() => this.checkNet(pc), 600); }
       else if (s === 'failed' || s === 'disconnected') this.lost();
     });
   },
+  /* which way the video goes: same Wi-Fi (direct, HD) or through the internet */
+  async checkNet(pc){
+    const n = await netType(pc); if (this.call?.peerConnection !== pc) return;
+    const changed = n !== this.net; this.net = n;
+    if (changed && this.qSel === 'auto' && !this.paused && (n === 'lan' ? '720' : '480') !== this.q) await this.open();
+    this.setBitrate(); this.sendInfo(); if (!this.paused) this.okStatus();
+    if (changed && n !== 'lan' && n !== 'unknown') toast('This phone is not on the same Wi-Fi as the laptop. Join the same Wi-Fi for HD video.', 'warn');
+  },
+  setBitrate(){
+    const snd = this.call?.peerConnection?.getSenders?.().find(s => s.track?.kind === 'video'); if (!snd?.getParameters) return;
+    const p = snd.getParameters(); if (!p.encodings?.length) p.encodings = [{}];
+    p.encodings[0].maxBitrate = this.net === 'lan' ? {480:1500000, 720:3500000, 1080:6000000}[this.q] : 900000;
+    snd.setParameters(p).catch(() => {});
+  },
+  okStatus(){ const lan = this.net === 'lan'; camStatus(lan || this.net === 'unknown' ? 'ok' : 'busy', lan ? `Same Wi-Fi · HD ${this.q}p` : this.net === 'unknown' ? 'Streaming to the laptop' : 'Not on the same Wi-Fi', lan ? `Laptop ${this.code} · keep this screen on` : this.net === 'unknown' ? `Laptop ${this.code} · ${this.q}p` : `Join the laptop's Wi-Fi for HD · now ${this.q}p`); },
+  note(t){ toast(t, 'warn'); this.conn?.open && this.conn.send({t:'note', text:t}); },
+  async setZoom(z){
+    if (this.paused) return; this.zoom = clamp(+z || 1, 1, 3);
+    this.zoomF = await hwZoom(this.stream?.getVideoTracks()[0], this.zoom);
+    this.renderTools(); this.sendInfo();
+  },
+  async setFocus(mode, pt){
+    if (this.paused) return;
+    const ok = await hwFocus(this.stream?.getVideoTracks()[0], mode, pt);
+    if (!ok){ this.note('This phone camera does not let the browser change focus. It uses auto focus.'); this.focus = 'auto'; }
+    else this.focus = mode;
+    this.renderTools(); this.sendInfo();
+  },
+  /* scan the pairing QR on the laptop screen: no typing */
+  async scan(){
+    if (!window.jsQR){ toast('The QR reader did not load. Type the code instead.', 'warn'); $('#camType').open = true; return; }
+    this.facing = 'environment';
+    if (!this.stream && !(await this.open())) return;
+    $('#camJoin').hidden = true; $('#camScan').hidden = false; this.scanning = true;
+    const cv = document.createElement('canvas'), x = cv.getContext('2d', {willReadFrequently:true}), v = $('#camLocal'); let warned = false;
+    while (this.scanning){
+      if (v.videoWidth){
+        const k = 720/Math.max(v.videoWidth, v.videoHeight); cv.width = Math.round(v.videoWidth*k); cv.height = Math.round(v.videoHeight*k); x.drawImage(v, 0, 0, cv.width, cv.height);
+        const q = jsQR(x.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height), code = q && pairCodeFrom(q.data);
+        if (code){ this.scanning = false; $('#camScan').hidden = true; beep(990, .08); $('#camCode').value = code; this.join(code); return; }
+        if (q && !warned){ warned = true; toast('That is not the laptop pairing QR', 'warn'); }
+      }
+      await sleep(150);
+    }
+  },
+  stopScan(){ this.scanning = false; $('#camScan').hidden = true; if (!this.joined){ $('#camJoin').hidden = false; this.stream?.getTracks().forEach(t => t.stop()); this.stream = null; } },
   lost(){ $('#camLive').hidden = true; clearInterval(this.pingT); if (this.joined){ camStatus('busy', 'Reconnecting…', 'Connection to the laptop dropped'); this.retry(); } },
   retry(){ clearTimeout(this.retryT); this.retryT = setTimeout(() => this.connect(), 2500); },
   startPing(){ clearInterval(this.pingT); this.pingT = setInterval(() => { if (this.conn?.open) this.conn.send({t:'ping', ts:performance.now()}); }, 2000); },
@@ -895,6 +1016,8 @@ const Cam = {
     else if (d.t === 'switch') this.tool('switch');
     else if (d.t === 'torch') this.tool('torch');
     else if (d.t === 'model') this.setModel(d);
+    else if (d.t === 'zoom') this.setZoom(d.v);
+    else if (d.t === 'focus') this.setFocus(d.mode, d.pt);
   },
   /* the trained model sent from the laptop: the phone shows its own live labels */
   async setModel(d){
@@ -923,7 +1046,7 @@ const Cam = {
     }
     this.detT = 0;
   },
-  sendInfo(){ if (this.conn?.open) this.conn.send({t:'info', facing:this.facing, torch:this.torch, q:this.q, paused:!!this.paused}); },
+  sendInfo(){ if (this.conn?.open) this.conn.send({t:'info', facing:this.facing, torch:this.torch, q:this.q, paused:!!this.paused, net:this.net, zoom:this.zoom, zoomF:this.zoomF, focus:this.focus}); },
   /* the laptop switched the camera off: release the camera, keep the Wi-Fi link */
   pause(){
     if (this.paused) return;
@@ -938,8 +1061,7 @@ const Cam = {
     this.paused = false;
     if (await this.open()){
       $('#camPaused').hidden = true; $('#camLive').hidden = false; $('#camDet').hidden = !this.model;
-      camStatus('ok', 'Streaming to the laptop', `Code ${this.code} · ${this.q}p · keep this screen on`);
-      toast('Camera back on', 'ok');
+      this.okStatus(); toast('Camera back on', 'ok');
     }
   },
   async tool(a){
@@ -951,12 +1073,18 @@ const Cam = {
       this.torch = !this.torch; try { await tr.applyConstraints({advanced:[{torch:this.torch}]}); } catch { this.torch = false; }
       this.renderTools(); this.sendInfo();
     }
-    else if (a === 'quality'){ this.q = this.q === '480' ? '720' : '480'; LS.set('camQ', this.q); await this.open(); toast(`Stream quality ${this.q}p`); }
+    else if (a === 'quality'){ const o = ['auto', '480', '720', '1080']; this.qSel = o[(o.indexOf(this.qSel) + 1) % o.length]; LS.set('camQSel', this.qSel); await this.open(); this.okStatus(); toast(this.qSel === 'auto' ? `Quality auto (${this.q}p${this.net === 'lan' ? ', same Wi-Fi' : ''})` : `Stream quality ${this.q}p`); }
+    else if (a === 'zoom'){ await this.setZoom(this.zoom % 3 + 1); toast(`Zoom ${this.zoom}x`); }
+    else if (a === 'focus'){ await this.setFocus(this.focus === 'auto' ? 'lock' : 'auto'); toast(this.focus === 'lock' ? 'Focus locked' : 'Auto focus'); }
     else if (a === 'full'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.().catch(() => {}); }
   },
-  renderTools(){ $('#camQ').textContent = this.q + 'p'; $('[data-ct="torch"]').classList.toggle('on', this.torch); },
+  renderTools(){
+    $('#camQ').textContent = this.qSel === 'auto' ? 'AUTO' : this.q + 'p'; $('[data-ct="torch"]').classList.toggle('on', this.torch);
+    $('#camZ').textContent = this.zoom + 'x'; $('[data-ct="zoom"]').classList.toggle('on', this.zoom > 1); $('[data-ct="focus"]').classList.toggle('on', this.focus === 'lock');
+    const dz = Math.max(1, this.zoom/(this.zoomF || 1)), v = $('#camLocal'); v.style.transform = `${this.facing === 'user' ? 'scaleX(-1) ' : ''}scale(${dz})`;
+  },
   async keepAwake(){ try { this.wake = await navigator.wakeLock?.request('screen'); } catch {} },
-  leave(){ this.joined = false; this.paused = false; $('#camPaused').hidden = true; clearTimeout(this.retryT); clearInterval(this.pingT); try { this.call?.close(); this.conn?.close(); this.peer?.destroy(); } catch {} this.stream?.getTracks().forEach(t => t.stop()); this.stream = null; this.wake?.release?.(); }
+  leave(){ this.scanning = false; $('#camScan').hidden = true; this.joined = false; this.paused = false; $('#camPaused').hidden = true; clearTimeout(this.retryT); clearInterval(this.pingT); try { this.call?.close(); this.conn?.close(); this.peer?.destroy(); } catch {} this.stream?.getTracks().forEach(t => t.stop()); this.stream = null; this.wake?.release?.(); }
 };
 function camStatus(s, title, sub){ $('#camDot').dataset.s = s; $('#camState').textContent = title; $('#camSub').textContent = sub; }
 document.addEventListener('visibilitychange', () => { if (!document.hidden && Cam.joined) Cam.keepAwake(); });
@@ -1183,8 +1311,14 @@ function renderTrain(){
     Data.count('bg') < MIN_PICS ? '<span class="tag warn">Add floor / background photos for fewer false guesses</span>' : ''
   ].join('');
   const tag = $('#trTag'); tag.className = 'tag ' + (!M ? '' : Brain.stale() ? 'warn' : 'ok'); tag.textContent = !M ? 'Not trained' : Brain.stale() ? 'Data changed · retrain' : 'Model ready';
-  const b = $('#trainBtn'); b.disabled = Brain.running || objs.length < 2;
-  b.innerHTML = Brain.running ? '<i class="spin"></i>Training…' : icon('i-brain') + (M ? 'Train again' : 'Train model');
+  const b = $('#trainBtn'), need = objs.length < 2; b.disabled = Brain.running || need;
+  b.innerHTML = Brain.running ? '<i class="spin"></i>Training…' : icon(need ? 'i-lock' : 'i-brain') + (need ? `Need ${2 - objs.length} more object${2 - objs.length === 1 ? '' : 's'} to train` : M ? 'Train again' : 'Train model');
+  if (!Brain.running){
+    if (need){
+      const short = few.map(c => `${c.name} (${Data.count(c.id)}/${MIN_PICS})`).slice(0, 3).join(', ');
+      tLog(`Training needs at least 2 objects with ${MIN_PICS}+ photos each. Ready now: ${objs.length}.` + (short ? ` Add more photos to: ${short}.` : ' Go to Step 1 · Collect data and add objects.'));
+    } else if (!M) tLog(`Ready: ${objs.length} objects. Press Train model.`);
+  }
   if (!Brain.running && !M){ setPipe(-1); $('#tBar').style.width = '0'; }
   if (M && !Brain.running && $('#resPanel').hidden) renderResults(false);
   renderSend(); renderNext();
@@ -1247,7 +1381,7 @@ function buildStart(m, withUrl){
   return `CQ2|START|id=${clean(m.id)}|t=${clean(m.title)}|show=${m.show}|limit=${m.limit}|peek=${m.peek ? 1 : 0}|cap=${m.cap}|tasks=${tasks}` + (m.rules.length ? `|rules=${m.rules.map(clean).join('~')}` : '') + (url ? `|url=${url.replace(/\|/g, '')}` : '');
 }
 const Mission = {
-  state:'idle', m:null, t0:0, sT0:0, searchSec:0, revealEnd:0, remaining:0, captures:[], peeks:0, peekUntil:0, endQR:false, reason:'', judge:{push:{}, collisions:0, touches:0}, run:null, tickT:0, lastAuto:0,
+  state:'idle', m:null, t0:0, sT0:0, searchSec:0, revealEnd:0, remaining:0, captures:[], peeks:0, peekUntil:0, endQR:false, reason:'', judge:{push:{}}, run:null, tickT:0, lastAuto:0, awaitCP:null,
   scanning(){ return this.state === 'search' || this.state === 'run'; },
   start(){
     if (Source.kind === 'none'){ toast('Turn on a camera first', 'warn'); return; }
@@ -1262,7 +1396,7 @@ const Mission = {
     this.searchSec = (performance.now() - this.sT0)/1000;
     const missing = m.tasks.filter(t => t.type === 'cap' && !Brain.model?.cls.some(c => norm(c.name) === norm(t.obj))).map(t => t.obj);
     if (missing.length) toast(`Your AI was not trained on: ${missing.join(', ')}`, 'bad');
-    Object.assign(this, {m, captures:[], peeks:0, endQR:false, reason:'', judge:{push:{}, collisions:0, touches:0}, run:null});
+    Object.assign(this, {m, captures:[], peeks:0, endQR:false, reason:'', judge:{push:{}}, run:null, awaitCP:null});
     this.state = 'reveal'; this.revealEnd = performance.now() + m.show*1000; Drive.stopAll();
     this.render(); renderMode(); beep(880, .12);
   },
@@ -1290,19 +1424,34 @@ const Mission = {
     const q = parseQR(text);
     if (!q){ if (this.state === 'search') toast('That QR is not a mission card', 'warn'); return; }
     if (q.kind === 'START' && this.state === 'search'){ toast(`START found: mission ${q.id}`, 'ok'); this.begin(q); }
+    else if (q.kind === 'CP' && this.state === 'run') this.onCheckpoint(q.name || '');
     else if (q.kind === 'END' && this.state === 'run'){ if (q.id && norm(q.id) !== norm(this.m.id)){ toast(`That END card is for mission ${q.id}`, 'warn'); return; } toast('END scanned · checking your captures', 'ok'); this.finish(true, 'END QR scanned'); }
   },
+  /* C always takes the photo (near or far). The AI's best guess is the label; then the team must scan the checkpoint QR */
   capture(){
     if (this.state !== 'run') return;
-    const r = Engine.res, c = Engine.cur;
-    if (!c || !r?.c || r.c !== c){ toast(r?.why ? `Nothing captured: ${r.why.toLowerCase()}` : 'Nothing captured: no trained object in the AI box', 'warn'); beep(220, .12); return; }
-    const f = proc; if (!f.width) return;
-    const sh = document.createElement('canvas'); sh.width = 320; sh.height = Math.round(f.height*320/f.width); sh.getContext('2d').drawImage(f, 0, 0, sh.width, sh.height);
-    let cp = null; if (window.jsQR){ const q = jsQR(pctx.getImageData(0, 0, f.width, f.height).data, f.width, f.height); const p = q && parseQR(q.data); if (p?.kind === 'CP') cp = p.name || null; }
-    const shot = {n:this.captures.length + 1, id:c.id, label:c.name, conf:+r.conf.toFixed(3), t:+((performance.now() - this.t0)/1000).toFixed(1), img:sh.toDataURL('image/jpeg', .72), cp};
-    this.captures.push(shot); flashStage(); beep(1200, .06); flyToStrip(shot.img); setTimeout(() => this.renderStrip(), 650); this.lastAuto = performance.now();
+    const f = proc; if (!f.width || Source.kind === 'none'){ toast('No camera picture to capture', 'warn'); return; }
+    const r = Engine.res; let c = null, conf = 0, sure = false;
+    if (r?.c){ c = r.c; conf = r.conf; sure = true; }
+    else { const b = r?.list?.find(x => !x.c.bg); if (b){ c = b.c; conf = b.p*.5; } }
+    const sh = document.createElement('canvas'); sh.width = f.width; sh.height = f.height; sh.getContext('2d').drawImage(f, 0, 0);
+    const retake = this.awaitCP !== null, n = retake ? this.captures[this.awaitCP].n : this.captures.length + 1;
+    const shot = {n, id:c?.id || null, label:c ? c.name : 'Not recognised', conf:+conf.toFixed(3), sure, why:sure ? '' : (r?.why || 'AI not ready'), t:+((performance.now() - this.t0)/1000).toFixed(1), img:sh.toDataURL('image/jpeg', .8), cp:null, cpState:'wait'};
+    if (retake) this.captures[this.awaitCP] = shot; else { this.captures.push(shot); this.awaitCP = this.captures.length - 1; }
+    Engine.lastQR = '';                                   // so a checkpoint card already in view is read straight away
+    flashStage(); beep(1200, .06); flyToStrip(shot.img); this.lastAuto = performance.now();
+    toast(`${retake ? 'Retaken' : 'Captured'}: ${shot.label}${sure ? '' : ' (not sure)'}. Now scan the checkpoint QR`, sure ? 'ok' : 'warn');
+    setTimeout(() => this.renderLive(), 300);
   },
-  autoCapture(){ const c = Engine.cur; if (!c || performance.now() - this.lastAuto < 4000 || this.captures.some(x => x.id === c.id) || (Engine.res?.conf || 0) < .75) return; this.capture(); },
+  onCheckpoint(name){
+    if (this.awaitCP === null){ toast('Capture the object first (C), then scan its checkpoint QR', 'warn'); beep(220, .12); return; }
+    const s = this.captures[this.awaitCP]; s.cp = name; s.cpState = norm(name) === norm(s.label) ? 'ok' : 'bad'; this.awaitCP = null;
+    if (s.cpState === 'ok'){ toast(`Checkpoint ${name} ✓ matches the photo`, 'ok'); beep(990, .08); setTimeout(() => beep(1320, .1), 110); }
+    else { toast(`Checkpoint is ${name}, but the AI saw ${s.label}. This capture will not count.`, 'bad'); beep(220, .2); }
+    this.renderLive();
+  },
+  skipCP(){ if (this.awaitCP === null) return; this.captures[this.awaitCP].cpState = 'skip'; this.awaitCP = null; toast('Checkpoint skipped', 'warn'); this.renderLive(); },
+  autoCapture(){ const c = Engine.cur; if (!c || this.awaitCP !== null || performance.now() - this.lastAuto < 4000 || this.captures.some(x => x.id === c.id) || (Engine.res?.conf || 0) < .75) return; this.capture(); },
   peek(){ if (this.state !== 'run') return; if (!this.m.peek){ toast('Peeking is switched off for this mission', 'warn'); return; } this.peeks++; this.peekUntil = performance.now() + 3000; toast(`Peek ${this.peeks} · ${PTS.peek} points`, 'warn'); },
   async cancel(){ if (await modal({title:'Stop searching?', text:'The mission has not started yet. You can start again any time.', ok:'Stop'})){ clearInterval(this.tickT); this.state = 'idle'; $('#hTimer').hidden = true; Drive.stopAll(); this.render(); renderMode(); renderHud(); } },
   async endNow(){ if (this.state === 'run' && await modal({title:'End the mission now?', text:'Without the END QR you lose the finish bonus and the time bonus.', ok:'End mission', danger:true})) this.finish(false, 'Ended by hand'); },
@@ -1318,17 +1467,18 @@ const Mission = {
   evaluate(){
     const m = this.m, caps = this.captures, J = this.judge;
     const exp = m.tasks.map((t, i) => ({...t, i})).filter(t => t.type === 'cap'), keys = exp.map(t => norm(t.obj));
-    const first = new Map(); caps.forEach((c, j) => { const k = norm(c.label); if (!first.has(k)) first.set(k, j); });
+    const ck = c => (c.cpState === 'bad' || !c.id) ? '\u0000' + c.n : norm(c.label);
+    const first = new Map(); caps.forEach((c, j) => { const k = ck(c); if (!first.has(k)) first.set(k, j); });
     const pos = keys.map(k => first.has(k) ? first.get(k) : -1);
     const idx = pos.map((p, i) => i).filter(i => pos[i] >= 0), L = idx.map(() => 1), P = idx.map(() => -1);
     for (let a = 0; a < idx.length; a++) for (let b = 0; b < a; b++) if (pos[idx[b]] < pos[idx[a]] && L[b] + 1 > L[a]){ L[a] = L[b] + 1; P[a] = b; }
     let best = -1; L.forEach((v, i) => { if (best < 0 || v > L[best]) best = i; });
     const inOrder = new Set(); for (let i = best; i >= 0; i = P[i]) inOrder.add(idx[i]);
-    const rows = []; let found = 0, ordered = 0, push = 0;
+    const rows = []; let found = 0, ordered = 0, push = 0, cpN = 0;
     m.tasks.forEach((t, i) => {
       if (t.type === 'cap'){
         const e = exp.findIndex(x => x.i === i), p = pos[e], shot = p >= 0 ? caps[p] : null, st = !shot ? 'bad' : inOrder.has(e) ? 'good' : 'half';
-        if (shot) found++; if (st === 'good') ordered++;
+        if (shot) found++; if (st === 'good') ordered++; if (shot?.cpState === 'ok') cpN++;
         rows.push({i, t, shot, st, why:!shot ? 'Not captured' : st === 'good' ? `Captured in order · ${Math.round(shot.conf*100)}% sure` : 'Captured, but out of order'});
       } else {
         const j = J.push[i] || 'pending', st = j === 'full' ? 'good' : j === 'half' ? 'half' : j === 'miss' ? 'bad' : '';
@@ -1336,9 +1486,9 @@ const Mission = {
         rows.push({i, t, st, judge:j, why:j === 'pending' ? 'Judge: did the block reach the zone?' : j === 'full' ? 'Fully inside the zone' : j === 'half' ? 'Partly inside' : 'Not delivered'});
       }
     });
-    const keySet = new Set(keys), extra = caps.map((c, j) => ({c, j})).filter(({c, j}) => !keySet.has(norm(c.label)) || first.get(norm(c.label)) !== j).map(({c}) => ({c, kind:keySet.has(norm(c.label)) ? 'dup' : 'wrong'}));
-    const wrong = extra.filter(x => x.kind === 'wrong').length, dups = extra.length - wrong, full = exp.length > 0 && ordered === exp.length, timeB = this.endQR ? Math.floor(this.remaining/10) : 0;
-    const B = [['Correct objects captured', found, found*PTS.found], ['Captured in the right order', ordered, ordered*PTS.order], ['Full sequence bonus', full ? 'yes' : 'no', full ? PTS.full : 0], ['Push tasks (judge)', '', push], ['Wrong objects captured', wrong, wrong*PTS.wrong], ['Duplicate captures', dups, dups*PTS.dup], ['Mission peeks', this.peeks, this.peeks*PTS.peek], ['Collisions (judge)', J.collisions, J.collisions*PTS.collision], ['Robot touched (judge)', J.touches, J.touches*PTS.touch], ['Finished with END QR', this.endQR ? 'yes' : 'no', this.endQR ? PTS.finish : 0], ['Time bonus (1 per 10 s left)', fmtT(this.remaining), timeB]];
+    const keySet = new Set(keys), extra = caps.map((c, j) => ({c, j})).filter(({c, j}) => !keySet.has(ck(c)) || first.get(ck(c)) !== j).map(({c}) => ({c, kind:keySet.has(ck(c)) ? 'dup' : c.cpState === 'bad' ? 'mismatch' : 'wrong'}));
+    const wrong = extra.filter(x => x.kind !== 'dup').length, dups = extra.length - wrong, full = exp.length > 0 && ordered === exp.length, timeB = this.endQR ? Math.floor(this.remaining/10) : 0;
+    const B = [['Correct objects captured', found, found*PTS.found], ['Captured in the right order', ordered, ordered*PTS.order], ['Checkpoint QR matched', cpN, cpN*PTS.cp], ['Full sequence bonus', full ? 'yes' : 'no', full ? PTS.full : 0], ['Push tasks (judge)', '', push], ['Wrong objects captured', wrong, wrong*PTS.wrong], ['Duplicate captures', dups, dups*PTS.dup], ['Mission peeks', this.peeks, this.peeks*PTS.peek], ['Finished with END QR', this.endQR ? 'yes' : 'no', this.endQR ? PTS.finish : 0], ['Time bonus (1 per 10 s left)', fmtT(this.remaining), timeB]];
     return {rows, extra, B, total:Math.max(0, B.reduce((a, b) => a + b[2], 0)), found, ordered, exp:exp.length};
   },
   judgeChanged(){ if (!this.run) return; this.run.judge = this.judge; this.run.score = this.evaluate().total; DB.put('runs', this.run).catch(() => {}); this.renderResults(false); },
@@ -1360,7 +1510,7 @@ const Mission = {
     }).join('');
   },
   rulesHTML(){
-    const r = [...this.m.rules, `Capture in the order shown. Wrong objects ${PTS.wrong}, repeats ${PTS.dup}.`, this.m.peek ? `Press H to peek for 3 s (${PTS.peek} each).` : 'No peeking in this mission.', `Scan the END QR before ${fmtT(this.m.limit)} runs out.`];
+    const r = [...this.m.rules, `Capture in the order shown, then scan the checkpoint QR next to each object (+${PTS.cp}). Wrong objects ${PTS.wrong}, repeats ${PTS.dup}.`, this.m.peek ? `Press H to peek for 3 s (${PTS.peek} each).` : 'No peeking in this mission.', `Scan the END QR before ${fmtT(this.m.limit)} runs out.`];
     return `<div class="rules"><b>${icon('i-shield', 'width:16px;height:16px')}Rules</b><ul>${r.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
   },
   render(){
@@ -1393,39 +1543,47 @@ const Mission = {
     } else if (st === 'run'){
       box.innerHTML = `<div class="pb" style="padding-top:1.1rem"><div class="runhead"><div><small class="hint">TIME LEFT</small><div class="bigtimer" id="bigT">${fmtT(this.remaining)}</div></div>
         ${this.m.cap === 'auto' ? '<span class="tag sky">Auto capture is on</span>' : `<button class="btn btn--brand btn--lg" id="mCap">${icon('i-shot')}Capture <kbd style="background:rgba(255,255,255,.25);color:#fff;border-color:rgba(255,255,255,.4)">C</kbd></button>`}</div>
+        <div id="cpArea"></div>
         <div class="memo"><div><b>${icon('i-eye', 'vertical-align:-4px;color:var(--brand)')} Mission hidden</b><p class="hint">${this.m.tasks.length} steps. Remember the order!${this.m.peek ? ' <kbd>H</kbd> to peek (−5).' : ''}</p></div></div>
         <div class="mcards hide" id="mCards" style="margin-bottom:.9rem">${this.cardsHTML()}</div>
-        <div class="row" style="justify-content:space-between;margin-bottom:.3rem"><b style="font-family:var(--f-d)">Your captures</b><span class="tag" id="capN">0</span></div>
-        <div class="strip" id="strip"></div>
+        <div class="row" style="justify-content:space-between;margin:.2rem 0 .4rem"><b style="font-family:var(--f-d)">Your steps</b><span class="tag" id="capN">0</span></div>
+        <div class="steplist" id="strip"></div>
         <div class="row" style="justify-content:flex-end;margin-top:.4rem"><button class="btn btn--sm btn--ghost" id="mEnd">End without END QR</button></div></div>`;
-      $('#mCap')?.addEventListener('click', () => this.capture()); $('#mEnd').onclick = () => this.endNow(); this.renderStrip();
+      $('#mCap')?.addEventListener('click', () => this.capture()); $('#mEnd').onclick = () => this.endNow(); this.renderLive();
     } else if (st === 'done') this.renderResults(true);
   },
-  renderStrip(){
+  renderStrip(){ this.renderLive(); },
+  /* live view while running: the photo just taken, the checkpoint prompt, then every step one by one */
+  renderLive(){
     const el = $('#strip'); if (!el) return; $('#capN').textContent = this.captures.length;
-    el.innerHTML = this.captures.length ? this.captures.map(s => `<div class="shot"><img src="${s.img}" alt=""><em>#${s.n} · ${fmtT(s.t)}</em><div>${esc(s.label)}</div></div>`).join('') : '<div class="empty">Captured photos appear here</div>';
-    el.scrollLeft = el.scrollWidth;
+    const pct = s => s.sure ? Math.round(s.conf*100) + '%' : 'not sure';
+    const cpTag = s => s.cpState === 'ok' ? `<span class="tag ok">${icon('i-check')}Checkpoint ${esc(s.cp)}</span>` : s.cpState === 'bad' ? `<span class="tag bad">Checkpoint ${esc(s.cp)} ✕</span>` : s.cpState === 'skip' ? '<span class="tag">No checkpoint</span>' : `<span class="tag warn pulse">${icon('i-qr')}Scan checkpoint</span>`;
+    el.innerHTML = this.captures.length ? this.captures.map(s => `<div class="lstep ${s.cpState}"><span class="vn">${s.n}</span><img src="${s.img}" alt=""><div><b>${esc(s.label)}</b><small>AI ${pct(s)} · at ${fmtT(s.t)}</small></div>${cpTag(s)}</div>`).join('') : '<div class="empty">Press <kbd>C</kbd> at each target. Each photo shows up here, then you scan its checkpoint QR.</div>';
+    const a = $('#cpArea'), w = this.awaitCP !== null ? this.captures[this.awaitCP] : null;
+    a.innerHTML = w ? `<div class="cpwait"><img src="${w.img}" alt=""><div class="cpw-b"><small>STEP ${w.n} CAPTURED</small><b>${w.sure ? 'AI sees' : 'AI guess'}: ${esc(w.label)} <span class="hint">${pct(w)}</span></b>
+        <p>${w.sure ? '' : `<span style="color:var(--sun-d)">${esc(w.why)}. Get closer and retake if it is wrong.</span><br>`}Now show the <b>checkpoint QR</b> next to this object to the camera.</p>
+        <div class="row wrap" style="gap:.4rem"><button class="btn btn--sm" id="cpRetake">${icon('i-shot')}Retake <kbd>C</kbd></button><button class="btn btn--sm btn--ghost" id="cpSkip">Skip checkpoint</button></div></div>
+        <span class="cpq">${icon('i-qr')}</span></div>` : '';
+    if (w){ $('#cpRetake').onclick = () => this.capture(); $('#cpSkip').onclick = () => this.skipCP(); }
+    const cb = $('#mCap'); if (cb) cb.innerHTML = icon('i-shot') + (w ? 'Retake' : 'Capture') + ' <kbd style="background:rgba(255,255,255,.25);color:#fff;border-color:rgba(255,255,255,.4)">C</kbd>';
+    el.scrollTop = el.scrollHeight;
   },
   renderResults(animate){
     const ev = this.evaluate(), box = $('#mBox'), url = (this.m.url || LS.get('adm.url', '')).trim();
     const rows = ev.rows.map((r, k) => {
       const cap = r.t.type === 'cap';
-      const ctl = !cap ? `<div class="seg3" data-push="${r.i}">${[['full', 'Full'], ['half', 'Half'], ['miss', 'Miss']].map(([v, t]) => `<button data-pv="${v}" class="${r.judge === v ? 'on' : ''}">${t}</button>`).join('')}</div>` : `<span class="tag ${r.st === 'good' ? 'ok' : r.st === 'half' ? 'warn' : 'bad'}">${r.st === 'good' ? '+' + (PTS.found + PTS.order) : r.st === 'half' ? '+' + PTS.found : '0'}</span>`;
-      return `<div class="vrow ${r.st}" style="--n:${animate ? k : 0}"><span class="vn">${r.i + 1}</span>${r.shot ? `<img src="${r.shot.img}" alt="">` : `<span class="noimg">${icon(cap ? 'i-cam' : 'i-push')}</span>`}<div><b>${esc(cap ? r.t.obj : `Push: ${r.t.from} → ${r.t.to}`)}</b><small>${esc(r.why)}${r.shot?.cp ? ' · checkpoint ✓' : ''}</small></div>${ctl}</div>`;
+      const ctl = !cap ? `<div class="seg3" data-push="${r.i}">${[['full', 'Full'], ['half', 'Half'], ['miss', 'Miss']].map(([v, t]) => `<button data-pv="${v}" class="${r.judge === v ? 'on' : ''}">${t}</button>`).join('')}</div>` : `<span class="tag ${r.st === 'good' ? 'ok' : r.st === 'half' ? 'warn' : 'bad'}">${r.st === 'good' ? '+' + (PTS.found + PTS.order + (r.shot.cpState === 'ok' ? PTS.cp : 0)) : r.st === 'half' ? '+' + (PTS.found + (r.shot.cpState === 'ok' ? PTS.cp : 0)) : '0'}</span>`;
+      return `<div class="vrow ${r.st}" style="--n:${animate ? k : 0}"><span class="vn">${r.i + 1}</span>${r.shot ? `<img src="${r.shot.img}" alt="">` : `<span class="noimg">${icon(cap ? 'i-cam' : 'i-push')}</span>`}<div><b>${esc(cap ? r.t.obj : `Push: ${r.t.from} → ${r.t.to}`)}</b><small>${esc(r.why)}${r.shot ? (r.shot.cpState === 'ok' ? ' · checkpoint ✓' : ' · no checkpoint') : ''}</small></div>${ctl}</div>`;
     }).join('');
-    const extra = ev.extra.map(x => `<div class="vrow bad"><span class="vn">✕</span><img src="${x.c.img}" alt=""><div><b>${esc(x.c.label)}</b><small>${x.kind === 'dup' ? 'Captured again' : 'Not in this mission'} · #${x.c.n} at ${fmtT(x.c.t)}</small></div><span class="tag bad">${x.kind === 'dup' ? PTS.dup : PTS.wrong}</span></div>`).join('');
+    const extra = ev.extra.map(x => `<div class="vrow bad"><span class="vn">✕</span><img src="${x.c.img}" alt=""><div><b>${esc(x.c.label)}</b><small>${x.kind === 'dup' ? 'Captured again' : x.kind === 'mismatch' ? `AI saw ${esc(x.c.label)}, checkpoint was ${esc(x.c.cp)}` : !x.c.id ? 'The AI did not recognise anything' : 'Not in this mission'} · #${x.c.n} at ${fmtT(x.c.t)}</small></div><span class="tag bad">${x.kind === 'dup' ? PTS.dup : PTS.wrong}</span></div>`).join('');
     box.innerHTML = `<div class="pb" style="padding-top:1.1rem">
       <div class="score-hero"><small>${esc(S.team || 'Team')} · Mission ${esc(this.m.id)} · ${esc(this.reason)}</small><div class="sv grad-text" id="scoreV">${animate ? 0 : ev.total}</div><small>points</small>
         <div class="row wrap" style="gap:.4rem;margin-top:.6rem;justify-content:center"><span class="tag ok">${ev.found}/${ev.exp} objects</span><span class="tag sky">${ev.ordered}/${ev.exp} in order</span><span class="tag">search ${fmtT(this.searchSec)}</span><span class="tag">mission ${fmtT(this.m.limit - this.remaining)}</span></div></div>
       <div class="verd">${rows}${extra}</div>
-      <div class="judge"><b style="font-family:var(--f-d)">Judge</b>
-        <div><span>Collisions / wall hits <small class="hint">(${PTS.collision} each)</small></span><span class="stepper2" data-j="collisions"><button data-d="-1">−</button><output>${this.judge.collisions}</output><button data-d="1">+</button></span></div>
-        <div><span>Robot touched by hand <small class="hint">(${PTS.touch} each)</small></span><span class="stepper2" data-j="touches"><button data-d="-1">−</button><output>${this.judge.touches}</output><button data-d="1">+</button></span></div></div>
       <table class="btab">${ev.B.map(([n, v, p]) => `<tr class="${p > 0 ? 'pos' : p < 0 ? 'neg' : ''}"><td>${n}${v !== '' ? ` <span class="hint">(${v})</span>` : ''}</td><td>${p > 0 ? '+' : ''}${p}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${ev.total}</td></tr></table>
       <div class="row wrap" style="margin-top:1rem"><button class="btn btn--grad" id="upBtn" ${url ? '' : 'title="No results link set by the organisers"'}>${icon('i-send')}${this.run?.uploaded ? 'Uploaded ✓' : 'Upload results'}</button><button class="btn" id="dlBtn">${icon('i-down')}Download</button><span class="grow"></span><button class="btn btn--ghost" id="newM">New mission</button></div></div>`;
     if (animate) countUp($('#scoreV'), ev.total, v => Math.round(v), 1400);
     box.querySelectorAll('[data-push]').forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-pv]'); if (!b) return; this.judge.push[+s.dataset.push] = b.dataset.pv; this.judgeChanged(); }));
-    box.querySelectorAll('.stepper2').forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; const k = s.dataset.j; this.judge[k] = Math.max(0, this.judge[k] + +b.dataset.d); this.judgeChanged(); }));
     $('#upBtn').onclick = () => this.upload(); $('#dlBtn').onclick = () => this.downloadRun(); $('#newM').onclick = () => this.reset();
   }
 };
@@ -1685,7 +1843,7 @@ const Admin = {
 };
 function qrSvg(text){ const q = qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({cellSize:4, margin:2, scalable:true}); }
 function renderPts(sel){
-  const rows = [['Correct object captured', PTS.found], ['Captured in the right order', PTS.order], ['Whole sequence in order', PTS.full], ['Push task fully done', PTS.pushFull], ['Finished with END QR', PTS.finish], ['Time bonus', '+1 / 10 s'], ['Wrong object captured', PTS.wrong], ['Duplicate capture', PTS.dup], ['Mission peek', PTS.peek], ['Collision', PTS.collision], ['Robot touched', PTS.touch]];
+  const rows = [['Correct object captured', PTS.found], ['Captured in the right order', PTS.order], ['Checkpoint QR matches the photo', PTS.cp], ['Whole sequence in order', PTS.full], ['Push task fully done', PTS.pushFull], ['Finished with END QR', PTS.finish], ['Time bonus', '+1 / 10 s'], ['Wrong object captured', PTS.wrong], ['Duplicate capture', PTS.dup], ['Mission peek', PTS.peek]];
   $(sel).innerHTML = rows.map(([n, v]) => `<div><span>${n}</span><b class="${typeof v === 'number' && v < 0 ? 'n' : 'p'}">${typeof v === 'number' && v > 0 ? '+' + v : v}</b></div>`).join('');
 }
 
@@ -1694,7 +1852,11 @@ function renderPts(sel){
    ===================================================================== */
 // landing
 $('#hTeam').onclick = $('#hTeam2').onclick = $('#hLaunch').onclick = () => go('app', 'app');
-$('#hCam').onclick = () => { go('cam', 'cam'); $('#camCode').value = LS.get('camCode', ''); $('#camCode').focus(); };
+$('#hCam').onclick = () => { go('cam', 'cam'); $('#camCode').value = LS.get('camCode', ''); renderRejoin(); };
+function renderRejoin(){ const c = LS.get('camCode', ''), b = $('#camReBtn'); b.hidden = !c; if (c) b.innerHTML = `${icon('i-link')}Reconnect to laptop ${c}`; }
+$('#camScanBtn').onclick = () => Cam.scan();
+$('#camScanX').onclick = () => Cam.stopScan();
+$('#camReBtn').onclick = () => Cam.join(LS.get('camCode', ''));
 $('#hAdmin').onclick = () => go('admin', 'admin');
 // Admin button in the team app and phone bars (asks first if that would interrupt something)
 $('#aAdmin').onclick = async () => {
@@ -1741,7 +1903,19 @@ $$('[data-v]').forEach(b => b.onclick = () => {
   else if (v === 'power') Source.power();
   else if (v === 'switch') Source.switchCam();
   else if (v === 'torch') Link.send({t:'torch'});
+  else if (v === 'zoom') Source.zoomStep();
+  else if (v === 'focus') Source.focusStep();
   else if (v === 'full') document.fullscreenElement ? document.exitFullscreen() : $('#stage').requestFullscreen?.();
+});
+// click the video to focus on that spot (cameras that allow it)
+$('#stage').addEventListener('click', e => {
+  if (Source.kind === 'none' || e.target.closest('button, a, input, .hud, .det')) return;
+  const r = vid.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+  let x = (e.clientX - r.left)/r.width, y = (e.clientY - r.top)/r.height;
+  if ((S.mirror ? -1 : 1)*(S.rot ? -1 : 1) < 0) x = 1 - x; if ((S.flip ? -1 : 1)*(S.rot ? -1 : 1) < 0) y = 1 - y;
+  const ring = document.createElement('div'); ring.className = 'focusring'; const sr = $('#stage').getBoundingClientRect();
+  ring.style.left = (e.clientX - sr.left) + 'px'; ring.style.top = (e.clientY - sr.top) + 'px'; $('#stage').appendChild(ring); setTimeout(() => ring.remove(), 900);
+  Source.focusStep({x, y});
 });
 $('#zone').value = S.zone; setRange($('#zone')); $('#zoneOut').textContent = S.zone + '%';
 $('#zone').addEventListener('input', e => { S.zone = +e.target.value; setRange(e.target); $('#zoneOut').textContent = S.zone + '%'; saveS(); });
@@ -1861,7 +2035,7 @@ $('#rClear').onclick = async () => { if (await modal({title:'Clear all results o
 function routeHash(){
   const h = location.hash, m = /^#cam=([A-Za-z]{4})/.exec(h);
   if (m){ View.set('cam'); $('#camCode').value = m[1].toUpperCase(); Cam.join(m[1]); }
-  else if (h === '#cam'){ View.set('cam'); $('#camCode').value = LS.get('camCode', ''); }
+  else if (h === '#cam'){ View.set('cam'); $('#camCode').value = LS.get('camCode', ''); renderRejoin(); }
   else if (h === '#app') View.set('app');
   else if (h === '#admin') View.set('admin');
   else if (!h || h === '#' || h === '#home') View.set('home');
